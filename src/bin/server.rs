@@ -11,7 +11,7 @@ pub async fn main() -> Result<(), std::io::Error> {
         .expect("Error while listening");
 
     // Actual data holder structure
-    let db = Db::new();
+    let mut db = Db::new();
 
     loop {
         let (mut socket, _) = listener
@@ -23,15 +23,19 @@ pub async fn main() -> Result<(), std::io::Error> {
 
         // Get buffer
         let mut buf = BytesMut::with_capacity(1024);
-        
+
+        let _ = socket.try_read_buf(&mut buf);
+
         // Get full input from user        
         let attrs = buffer_to_array(&mut buf);
         
+        println!("{:?}", attrs);
+
         // Retreive command
-        let command = Command::get(&attrs[0]);
+        let command = Command::get(&attrs[0]);        
         
-        let _ = socket.try_read_buf(&mut buf);
-        
+        process_query(command, attrs, &mut socket, &mut db).await?;
+
         println!("{:?}", buf);    
     }
 
