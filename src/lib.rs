@@ -1,3 +1,7 @@
+/**
+ * File for building modules
+ */
+
 pub mod helper;
 pub use helper::buffer_to_array;
 
