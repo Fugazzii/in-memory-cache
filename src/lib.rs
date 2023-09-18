@@ -2,11 +2,14 @@
  * File for building modules
  */
 
-pub mod helper;
-pub use helper::buffer_to_array;
+pub mod utils;
+pub use utils::buffer_to_array;
 
-pub mod cmd;
-pub use cmd::Command;
+pub mod command;
+pub use command::Command;
 
-pub mod db;
-pub use db::Db;
+pub mod database;
+pub use database::Db;
+
+pub mod cli;
+pub use cli::{Cli, ClientCommand};

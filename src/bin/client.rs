@@ -4,29 +4,15 @@
  */
 
 use bytes::BytesMut;
+use clap::Parser;
 use tokio::{
     net::TcpStream, 
     io::AsyncWriteExt
 };
-use clap::{Parser, Subcommand};
 use tokio::io::AsyncReadExt;
 
-#[derive(Parser, Debug)]
-struct Cli {
-    #[clap(subcommand)]
-    command: Command,
-}
-
-#[derive(Subcommand, Debug)]
-enum Command {
-    Get {
-        key: String,
-    },
-    Set {
-        key: String,
-        value: String
-    }
-}
+use in_memory_cache::cli;
+use cli::{Cli, ClientCommand};
 
 #[tokio::main]
 pub async fn main() -> Result<(), std::io::Error> {
@@ -37,7 +23,7 @@ pub async fn main() -> Result<(), std::io::Error> {
         .expect("Failed to connect to serve");
     
     match args.command {
-        Command::Set { key, value } => {
+        ClientCommand::Set { key, value } => {
 
             /* Header buffer  */
             stream.write_all(b"set").await.expect("Could not send buffer");
@@ -64,7 +50,7 @@ pub async fn main() -> Result<(), std::io::Error> {
             }
             Ok(())
         }
-        Command::Get { key } => {
+        ClientCommand::Get { key } => {
             /* Header buffer */
             stream.write_all(b"get").await?;
             stream.write_all(b" ").await?;

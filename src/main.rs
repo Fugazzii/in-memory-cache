@@ -4,7 +4,7 @@
  * In-memory database is run directly from the bin
  */
 
-pub mod helper;
+pub mod utils;
 
 pub fn main() {
     unimplemented!();
