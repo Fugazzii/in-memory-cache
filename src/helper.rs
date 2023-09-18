@@ -11,6 +11,12 @@ pub fn buffer_to_array(buf: &mut BytesMut) -> Vec<String> {
 
     for i in 0..length {
         match buf.get_u8() {
+            /*
+             * If received buffer is space, then add this is end of the word
+             * We need to add that word into vector
+             * ----------
+             * Otherwise, we collect word
+            */  
             b' ' => {
                 vec.push(word);
                 word = "".to_string();

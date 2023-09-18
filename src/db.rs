@@ -1,3 +1,9 @@
+/**
+ * Database implementation is just using hashmap for storing values
+ * Current version only supports get and set methods
+ * TODO: Remove method
+ */
+
 use bytes::Bytes;
 use std::collections::HashMap;
 

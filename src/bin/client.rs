@@ -1,5 +1,13 @@
+/**
+ * This is just an example how client can interact with in-memory-cache server
+ * It creates TCP connection with the server
+ */
+
 use bytes::BytesMut;
-use tokio::{net::TcpStream, io::AsyncWriteExt};
+use tokio::{
+    net::TcpStream, 
+    io::AsyncWriteExt
+};
 use clap::{Parser, Subcommand};
 use tokio::io::AsyncReadExt;
 
@@ -16,7 +24,7 @@ enum Command {
     },
     Set {
         key: String,
-        value: String,
+        value: String
     }
 }
 
@@ -30,13 +38,14 @@ pub async fn main() -> Result<(), std::io::Error> {
     
     match args.command {
         Command::Set { key, value } => {
+
+            /* Header buffer  */
             stream.write_all(b"set").await.expect("Could not send buffer");
             stream.write_all(b" ").await.expect("Could not send buffer");
-
             stream.write_all(&key.as_bytes()).await.expect("Could not send buffer");
             stream.write_all(b" ").await.expect("Could not send buffer");
-
             stream.write_all(&value.as_bytes()).await.expect("Could not send buffer");
+
             let mut buf = BytesMut::with_capacity(1024);
             let _length = stream.read_buf(&mut buf).await?;
 
@@ -56,9 +65,9 @@ pub async fn main() -> Result<(), std::io::Error> {
             Ok(())
         }
         Command::Get { key } => {
+            /* Header buffer */
             stream.write_all(b"get").await?;
             stream.write_all(b" ").await?;
-
             stream.write_all(&key.as_bytes()).await?;
 
             let mut buf = BytesMut::with_capacity(1024);
